@@ -4,10 +4,10 @@ with open("README.md", "r", encoding="utf-8") as f:
     long_description = f.read()
 
 
-__version__ = "0.0.1"
+__version__ = "0.1.0"
 
 REPO_NAME = "Renal-Disease-Classification"
-AUTHOR_USER_NAME = "Mrinmoy Matilal"
+AUTHOR_USER_NAME = "richochetclementine1315"
 SRC_REPO = "renalDiseaseClassification"
 AUTHOR_EMAIL = "mrinmoymatilal1315@gmail.com"
 
