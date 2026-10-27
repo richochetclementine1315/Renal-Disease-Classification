@@ -5340,6 +5340,12 @@ dependencies = [
     { name = "types-pyyaml" },
 ]
 
+[package.dev-dependencies]
+dev = [
+    { name = "ipykernel", version = "7.3.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version < '3.11'" },
+    { name = "ipykernel", version = "7.4.0", source = { registry = "https://pypi.org/simple" }, marker = "python_full_version >= '3.11'" },
+]
+
 [package.metadata]
 requires-dist = [
     { name = "dvc", specifier = ">=3.67.1" },
@@ -5362,6 +5368,9 @@ requires-dist = [
     { name = "tqdm", specifier = ">=4.70.1" },
     { name = "types-pyyaml", specifier = ">=6.0.12.20260906" },
 ]
+
+[package.metadata.requires-dev]
+dev = [{ name = "ipykernel", specifier = ">=7.3.0" }]
 
 [[package]]
 name = "requests"

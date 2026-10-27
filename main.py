@@ -1,6 +1,3 @@
-def main():
-    print("Hello from renal-disease-classification!")
+from src.renalDiseaseClassification import logger
 
-
-if __name__ == "__main__":
-    main()
+logger.info("Application started. Custom logg")
