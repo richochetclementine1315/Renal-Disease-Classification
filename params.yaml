@@ -1,1 +1,8 @@
-key: value
+AUGMENTATION: True
+IMAGE_SIZE: [224, 224, 3] #VGG-16 model er onujai image size set kora hoyeche acccording to oder documentation keras
+BATCH_SIZE: 16
+INCLUDE_TOP: False  #karon oder Fully connected layer gula amra use korbo na, amra amader nijer fully connected layer add korbo
+EPOCHS: 1
+CLASSES: 2 #Duto class add korbo ekta tumor and arekta normal
+WEIGHTS: "imagenet" #pretrained model er weight use korbo
+LEARNING_RATE: 0.01
