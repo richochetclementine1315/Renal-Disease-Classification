@@ -1,0 +1,166 @@
+schema: '2.0'
+stages:
+  data_ingestion:
+    cmd: python -m 
+      src.renalDiseaseClassification.pipeline.stage_01_data_ingestion
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: 65e86f42c53745b6f7d370629adab826
+      size: 567
+    - path: src/renalDiseaseClassification/components/data_ingestion.py
+      hash: md5
+      md5: dfce17c3177dfc3dfc2dffdab06d05ee
+      size: 1242
+    - path: src/renalDiseaseClassification/config/configuration.py
+      hash: md5
+      md5: 56ac2a60ca5869343d2d2b1166bd738a
+      size: 3297
+    - path: src/renalDiseaseClassification/entity/config_entity.py
+      hash: md5
+      md5: ba7925a7f4e486ed950e617fbed551d2
+      size: 931
+    - path: src/renalDiseaseClassification/pipeline/stage_01_data_ingestion.py
+      hash: md5
+      md5: c00a621c0043f2f6c6c9a670358e47d8
+      size: 1284
+    outs:
+    - path: artifacts/data_ingestion/kidney-ct-scan
+      hash: md5
+      md5: 37515bb11b289cf75a2f07c53c8cceb9.dir
+      size: 961115981
+      nfiles: 7360
+  prepare_base_model:
+    cmd: python -m 
+      src.renalDiseaseClassification.pipeline.stage_02_prepare_base_model
+    deps:
+    - path: config/config.yaml
+      hash: md5
+      md5: 65e86f42c53745b6f7d370629adab826
+      size: 567
+    - path: src/renalDiseaseClassification/components/prepare_base_model.py
+      hash: md5
+      md5: 56147a47f48f3d8505f35d99fe1e5ae1
+      size: 2180
+    - path: src/renalDiseaseClassification/config/configuration.py
+      hash: md5
+      md5: 56ac2a60ca5869343d2d2b1166bd738a
+      size: 3297
+    - path: src/renalDiseaseClassification/entity/config_entity.py
+      hash: md5
+      md5: ba7925a7f4e486ed950e617fbed551d2
+      size: 931
+    - path: 
+        src/renalDiseaseClassification/pipeline/stage_02_prepare_base_model.py
+      hash: md5
+      md5: 16a4c23c7f98ca86e7ef3aef541f719a
+      size: 1336
+    params:
+      params.yaml:
+        CLASSES: 2
+        IMAGE_SIZE:
+        - 224
+        - 224
+        - 3
+        INCLUDE_TOP: false
+        LEARNING_RATE: 0.02
+        WEIGHTS: imagenet
+    outs:
+    - path: artifacts/prepare_base_model
+      hash: md5
+      md5: 9d318586186554e36c3b03862de9904a.dir
+      size: 118054560
+      nfiles: 2
+  training:
+    cmd: python -m 
+      src.renalDiseaseClassification.pipeline.stage_03_model_training
+    deps:
+    - path: artifacts/data_ingestion/kidney-ct-scan
+      hash: md5
+      md5: 37515bb11b289cf75a2f07c53c8cceb9.dir
+      size: 961115981
+      nfiles: 7360
+    - path: artifacts/prepare_base_model
+      hash: md5
+      md5: 9d318586186554e36c3b03862de9904a.dir
+      size: 118054560
+      nfiles: 2
+    - path: config/config.yaml
+      hash: md5
+      md5: 65e86f42c53745b6f7d370629adab826
+      size: 567
+    - path: src/renalDiseaseClassification/components/model_training.py
+      hash: md5
+      md5: f99a46780cf3c72d2e01a66d11fddbdd
+      size: 2969
+    - path: src/renalDiseaseClassification/config/configuration.py
+      hash: md5
+      md5: 56ac2a60ca5869343d2d2b1166bd738a
+      size: 3297
+    - path: src/renalDiseaseClassification/entity/config_entity.py
+      hash: md5
+      md5: ba7925a7f4e486ed950e617fbed551d2
+      size: 931
+    - path: src/renalDiseaseClassification/pipeline/stage_03_model_training.py
+      hash: md5
+      md5: bb15a2a49a44c7d1fc4a9f7acbefc43c
+      size: 1058
+    params:
+      params.yaml:
+        AUGMENTATION: true
+        BATCH_SIZE: 16
+        EPOCHS: 3
+        IMAGE_SIZE:
+        - 224
+        - 224
+        - 3
+    outs:
+    - path: artifacts/training/model.h5
+      hash: md5
+      md5: e9bcfc1c56e5c36debb9f28922d45da9
+      size: 59337520
+  evaluation:
+    cmd: python -m 
+      src.renalDiseaseClassification.pipeline.stage_04_model_evaluation
+    deps:
+    - path: artifacts/data_ingestion/kidney-ct-scan
+      hash: md5
+      md5: 37515bb11b289cf75a2f07c53c8cceb9.dir
+      size: 961115981
+      nfiles: 7360
+    - path: artifacts/training/model.h5
+      hash: md5
+      md5: f52cbd312530374ba18deebefbc539a5
+      size: 59337520
+    - path: config/config.yaml
+      hash: md5
+      md5: 65e86f42c53745b6f7d370629adab826
+      size: 567
+    - path: src/renalDiseaseClassification/components/model_evaluation_mlflow.py
+      hash: md5
+      md5: 1f5634f3ed2e2e2639e6db70c108b8bd
+      size: 2322
+    - path: src/renalDiseaseClassification/config/configuration.py
+      hash: md5
+      md5: 56ac2a60ca5869343d2d2b1166bd738a
+      size: 3297
+    - path: src/renalDiseaseClassification/entity/config_entity.py
+      hash: md5
+      md5: ba7925a7f4e486ed950e617fbed551d2
+      size: 931
+    - path: src/renalDiseaseClassification/pipeline/stage_04_model_evaluation.py
+      hash: md5
+      md5: adb0fed39c93f1c95e20066247dd220b
+      size: 1067
+    params:
+      params.yaml:
+        BATCH_SIZE: 16
+        IMAGE_SIZE:
+        - 224
+        - 224
+        - 3
+    outs:
+    - path: scores.json
+      hash: md5
+      md5: 8cf28bf59a80368aee1a3f2c46ab054d
+      size: 73

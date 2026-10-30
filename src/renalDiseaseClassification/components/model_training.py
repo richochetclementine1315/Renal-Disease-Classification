@@ -3,6 +3,7 @@ import urllib.request as request
 from pathlib import Path
 from zipfile import ZipFile
 import tensorflow as tf
+import numpy as np
 import time
 
 from src.renalDiseaseClassification.entity.config_entity import TrainingConfig
@@ -20,7 +21,7 @@ class Training:
     def train_valid_generator(self):
 
         datagenerator_kwargs = dict(
-            rescale = 1./255,
+            preprocessing_function=tf.keras.applications.vgg16.preprocess_input,
             validation_split=0.20
         )
 
@@ -69,6 +70,13 @@ class Training:
     def train(self):
         self.steps_per_epoch = self.train_generator.samples // self.train_generator.batch_size
         self.validation_steps = self.valid_generator.samples // self.valid_generator.batch_size
+        class_counts = np.bincount(self.train_generator.classes)
+        total_samples = class_counts.sum()
+        class_weight = {
+            class_index: total_samples / (len(class_counts) * class_count)
+            for class_index, class_count in enumerate(class_counts)
+            if class_count
+        }
 
         self.model.fit(
             self.train_generator,
@@ -76,6 +84,7 @@ class Training:
             steps_per_epoch=self.steps_per_epoch,
             validation_steps=self.validation_steps,
             validation_data=self.valid_generator,
+            class_weight=class_weight,
             
         )
 

@@ -1,0 +1,63 @@
+stages:
+  data_ingestion:
+    cmd: python -m src.renalDiseaseClassification.pipeline.stage_01_data_ingestion
+    deps:
+      - src/renalDiseaseClassification/pipeline/stage_01_data_ingestion.py
+      - src/renalDiseaseClassification/components/data_ingestion.py
+      - src/renalDiseaseClassification/config/configuration.py
+      - src/renalDiseaseClassification/entity/config_entity.py
+      - config/config.yaml
+    outs:
+      - artifacts/data_ingestion/kidney-ct-scan
+
+  prepare_base_model:
+    cmd: python -m src.renalDiseaseClassification.pipeline.stage_02_prepare_base_model
+    deps:
+      - src/renalDiseaseClassification/pipeline/stage_02_prepare_base_model.py
+      - src/renalDiseaseClassification/components/prepare_base_model.py
+      - src/renalDiseaseClassification/config/configuration.py
+      - src/renalDiseaseClassification/entity/config_entity.py
+      - config/config.yaml
+    params:
+      - IMAGE_SIZE
+      - INCLUDE_TOP
+      - CLASSES
+      - WEIGHTS
+      - LEARNING_RATE
+    outs:
+      - artifacts/prepare_base_model
+
+  training:
+    cmd: python -m src.renalDiseaseClassification.pipeline.stage_03_model_training
+    deps:
+      - src/renalDiseaseClassification/pipeline/stage_03_model_training.py
+      - src/renalDiseaseClassification/components/model_training.py
+      - src/renalDiseaseClassification/config/configuration.py
+      - src/renalDiseaseClassification/entity/config_entity.py
+      - config/config.yaml
+      - artifacts/data_ingestion/kidney-ct-scan
+      - artifacts/prepare_base_model
+    params:
+      - IMAGE_SIZE
+      - EPOCHS
+      - BATCH_SIZE
+      - AUGMENTATION
+    outs:
+      - artifacts/training/model.h5
+
+  evaluation:
+    cmd: python -m src.renalDiseaseClassification.pipeline.stage_04_model_evaluation
+    deps:
+      - src/renalDiseaseClassification/pipeline/stage_04_model_evaluation.py
+      - src/renalDiseaseClassification/components/model_evaluation_mlflow.py
+      - src/renalDiseaseClassification/config/configuration.py
+      - src/renalDiseaseClassification/entity/config_entity.py
+      - config/config.yaml
+      - artifacts/data_ingestion/kidney-ct-scan
+      - artifacts/training/model.h5
+    params:
+      - IMAGE_SIZE
+      - BATCH_SIZE
+    metrics:
+      - scores.json:
+          cache: false
