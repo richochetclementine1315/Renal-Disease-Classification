@@ -118,6 +118,10 @@ ipython_config.py
 .pdm-python
 .pdm-build/
 
+# Local MLflow artifacts and credentials
+mlruns/
+secrets.txt
+
 # pixi
 #   Similar to Pipfile.lock, it is generally recommended to include pixi.lock in version control.
 # pixi.lock
@@ -221,3 +225,4 @@ __marimo__/
 
 # Others
 artifacts/
+secret.txt.txt

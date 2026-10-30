@@ -1,7 +1,7 @@
 import os
 from src.renalDiseaseClassification.constants import *
 from src.renalDiseaseClassification.utils.common import read_yaml, create_directories
-from src.renalDiseaseClassification.entity.config_entity import DataIngestionConfig, PrepareBaseModelConfig, TrainingConfig
+from src.renalDiseaseClassification.entity.config_entity import DataIngestionConfig, PrepareBaseModelConfig, TrainingConfig, EvaluationConfig
 
 
 
@@ -73,4 +73,16 @@ class ConfigurationManager:
             )
     
         return training_config
+
+
+    def get_evaluation_config(self) -> EvaluationConfig:
+            eval_config = EvaluationConfig(
+                path_of_model=Path("artifacts/training/model.h5"),
+                training_data=Path("artifacts/data_ingestion/kidney-ct-scan"),
+                mlflow_uri="https://dagshub.com/richochetclementine1315/Renal-Disease-Classification.mlflow",
+                all_params=dict(self.params),
+                params_image_size=self.params.IMAGE_SIZE,
+                params_batch_size=self.params.BATCH_SIZE
+            )
+            return eval_config    
     

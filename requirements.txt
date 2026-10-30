@@ -3,6 +3,8 @@ tensorflow-io-gcs-filesystem==0.31.0
 pandas 
 dvc
 mlflow==2.2.2
+setuptools<81
+idna>=3.10
 notebook
 numpy
 matplotlib
