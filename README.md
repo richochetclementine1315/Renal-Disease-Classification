@@ -108,7 +108,7 @@ The reproducible stages are:
 
 The following Mermaid diagram represents the VGG16 architecture supplied with this project: five convolutional blocks, max pooling after each block, and a classifier head. This project uses the convolutional feature extractor and replaces the original 1,000-class ImageNet head with a two-class softmax classifier.
 
-<img src="Screenshot 2026-10-30 143619.png" alt="Smartphone Schematic" height=400 width="600">
+
 
 
 ```mermaid
